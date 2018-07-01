@@ -1,0 +1,77 @@
+{% extends "base_generic.html" %}
+
+  {% block title %}
+  <title>Detailed Stock Report</title>
+  <style>
+.column {
+    float: left;
+}
+
+.left {
+    width: 25%;
+}
+
+.right {
+    width: 75%;
+}
+</style>
+
+
+
+
+  {% endblock %}
+
+
+{% block content %}
+<h3>{{price_data.symbol}}</h3>
+
+<div class="row">
+  <div class="column">
+  	<table>
+	{% for key,value in price_data.items %}
+  	<tr>
+    <td>{{ key}}</td>
+    <td>{{value}}</td> 
+  </tr>
+  {% endfor %}
+</table>
+
+  </div>
+  <div class="column">
+
+
+
+<!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+  <div id="tradingview_f38d2"></div>
+  <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/NASDAQ-{{price_data.symbol}}/" rel="noopener" target="_blank"><span class="blue-text">{{price_data.symbol}} chart</span></a> by TradingView</div>
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+  new TradingView.widget(
+  {
+  "width": 800,
+  "height": 500,
+  "symbol": "NASDAQ:{{price_data.symbol}}",
+  "interval": "D",
+  "timezone": "America/Los_Angeles",
+  "theme": "Light",
+  "style": "1",
+  "locale": "en",
+  "toolbar_bg": "#f1f3f6",
+  "enable_publishing": false,
+  "hide_side_toolbar": false,
+  "allow_symbol_change": true,
+  "studies": [
+    "MASimple@tv-basicstudies"
+  ],
+  "container_id": "tradingview_f38d2"
+}
+  );
+  </script>
+</div>
+</div>
+<!-- TradingView Widget END -->
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+<p>
+<h3>{{report_detail.name}}</h3>
+
+<div class="row">
+  <div class="column">
+  	<table border="1">
+  	<tr>
+
+		{% for key in report_detail.stocks.0.keys %}
+    		<td>{{key}}</td> 
+    	{% endfor %}
+	</tr>
+
+	{% for stock in report_detail.stocks %}
+		<tr>
+			{% for key,value in stock.items %}
+    			<td>{{value}}</td> 
+  			{% endfor %}
+  	 	</tr>
+
+  	{% endfor %}
+ 	</table>
+
+	{% render_table report_detail.stocks %}
+
+
+  </div>
+  <div class="column">
+
+</p>
+{% endblock %}
