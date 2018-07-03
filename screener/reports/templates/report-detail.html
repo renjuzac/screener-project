@@ -7,6 +7,9 @@
 
 <div class="row">
   <div class="column">
+
+ {% comment "Manual table creation" %}
+
   	<table border="1">
   	<tr>
 
@@ -24,6 +27,11 @@
 
   	{% endfor %}
  	</table>
+
+
+
+{% endcomment %}
+
 
 	{% render_table report_detail.stocks %}
 

@@ -2,10 +2,8 @@
 
 import json
 
-from caching import session
-
-
-#from ..config import barchart_api_key
+from screentools.stocks.caching import session
+from screentools.config import barchart_api_key
 
 barchart_api_key = "62ee527bc88e5383f47f67b551d75bda"
 

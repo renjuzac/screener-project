@@ -2,6 +2,11 @@ import datetime
 import pytz
 
 
+from reports.models import Report, Scan, Stock
+from screentools.stocks import scan
+from screentools.stocks import fetch_barchart
+
+
 def is_update_required(last_updated_at):
 
 	utc_now = pytz.utc.localize(datetime.datetime.utcnow())
@@ -30,3 +35,34 @@ def is_update_required(last_updated_at):
 
 # https://stackoverflow.com/questions/23642676/python-set-datetime-hour-to-be-a-specific-time
 # https://howchoo.com/g/ywi5m2vkodk/working-with-datetime-objects-and-timezones-in-python
+
+
+def update_report(report_scan_function, report_id):
+	report = Report.objects.filter(id__exact=report_id).get()
+	growth_stocks_list = scan.scan_on_growth()
+	stock_quotes  = fetch_barchart.getquote(symbols=growth_stocks_list)
+	for entry in stock_quotes:
+		stock = Stock()
+		stock.symbol = entry['symbol']
+		stock.name = entry['name']
+		stock.fiftyTwoWkHigh = entry['fiftyTwoWkHigh']
+		stock.fiftyTwoWkLow = entry['fiftyTwoWkLow']
+		stock.avgVolume = entry['avgVolume']
+		stock.twentyDayAvgVol = entry['twentyDayAvgVol']
+		stock.exchange = entry['exchange']
+		stock.lastPrice = entry['lastPrice']
+		stock.netChange = entry['netChange']
+		stock.percentChange = entry['percentChange']
+		stock.open_price = entry['open']
+		stock.high_price = entry['high']
+		stock.low_price = entry['low']
+		stock.close_price = entry['close']
+		stock.volume = entry['volume']
+
+		stock.save()
+		report.stocks.add(stock)
+
+		utc_now = pytz.utc.localize(datetime.datetime.utcnow())
+		pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
+		report.last_update = pst_now
+		report.save()

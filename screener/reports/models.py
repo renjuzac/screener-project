@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Stock(models.Model):
-	symbol = models.CharField(max_length=20)
+	symbol = models.CharField(max_length=20, unique=True)
 	name = models.CharField(max_length=20,null=True, blank=True)
 	fiftyTwoWkHigh = models.FloatField(null=True, blank=True)
 	fiftyTwoWkLow = models.FloatField(null=True, blank=True)
@@ -30,8 +30,8 @@ class Stock(models.Model):
 class Report(models.Model):
 	name = models.CharField(max_length=20, help_text="Report Name")
 	factor = models.ForeignKey('Scan', on_delete=models.SET_NULL, null=True)  # Foreign key scan 
-	stocks = models.ManyToManyField(Stock)  # Stock tickers
-	last_update = models.DateTimeField(auto_now=True)
+	stocks = models.ManyToManyField(Stock, blank=True)  # Stock tickers
+	last_update = models.DateTimeField()
 
 	def get_absolute_url(self):
 		return reverse('report-detail', args=[str(self.id)])
@@ -42,7 +42,8 @@ class Report(models.Model):
 
 class Scan(models.Model):
 	name = models.CharField(max_length=20, help_text="Scan Name")
-	description = models.CharField(max_length=20, help_text="scanner function")  # A function that holds scan critria 
+	description = models.CharField(max_length=50, help_text="scanner description")  
+	function = models.CharField(max_length=50,null=True, blank=True, help_text="scanner function") # A function that holds scan critria 
 
 	def __str__(self):
 		return '{}'.format(self.name)
