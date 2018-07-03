@@ -1,5 +1,5 @@
-from stocks import scan
-from stocks import fetch_intrinio
+from screentools.stocks import scan
+from screentools.stocks import fetch_intrinio
 
 stocks = scan.scan_on_growth()
 

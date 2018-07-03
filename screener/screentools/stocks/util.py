@@ -41,9 +41,12 @@ def update_report(report_scan_function, report_id):
 	report = Report.objects.filter(id__exact=report_id).get()
 	growth_stocks_list = scan.scan_on_growth()
 	stock_quotes  = fetch_barchart.getquote(symbols=growth_stocks_list)
+	print(len(stock_quotes))
 	for entry in stock_quotes:
-		stock = Stock()
-		stock.symbol = entry['symbol']
+		stock, created = Stock.objects.get_or_create(symbol=entry['symbol'])
+		print(entry['symbol'],Stock.objects.count())
+#			stock = Stock()
+#		stock.symbol = entry['symbol']
 		stock.name = entry['name']
 		stock.fiftyTwoWkHigh = entry['fiftyTwoWkHigh']
 		stock.fiftyTwoWkLow = entry['fiftyTwoWkLow']
@@ -66,3 +69,8 @@ def update_report(report_scan_function, report_id):
 		pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
 		report.last_update = pst_now
 		report.save()
+
+# https://djangobook.com/django-models-basic-data-access/
+# https://stackoverflow.com/questions/4075190/what-is-getattr-exactly-and-how-do-i-use-it
+# https://ubuntuforums.org/showthread.php?t=1110989
+
