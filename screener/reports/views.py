@@ -30,16 +30,13 @@ def index(request):
 def report_detail(request, id=1):
 	report = Report.objects.filter(id__exact=id).get()
 
-	if util.is_update_required(report.last_update):
-		util.update_report("name",report_id= id)
-
+#	if util.is_update_required(report.last_update):
+	util.update_report(report_id= id)
 
 	response = {}
 	response['name'] = report.name
 	response['factor'] = ""
-#	response['stocks'] = report.stocks.values()
 	response['last_update'] = report.last_update
-
 	table = ReportDetailTable(report.stocks.values())
 	RequestConfig(request).configure(table)
 	response['stocks'] = table
@@ -48,7 +45,7 @@ def report_detail(request, id=1):
 	return render(request, "report-detail.html" ,context = {"report_detail":response})
 
 def stock_detail(request, symbol):
-	response = serialize('json', [Stock.objects.filter(symbol__icontains=symbol).get()])
+	response = serialize('json', [Stock.objects.filter(symbol__iexact=symbol).get()])
 	response = json.loads(response)[0]['fields']
 	return render(request, "stock.html" ,context = {"price_data":response})
 

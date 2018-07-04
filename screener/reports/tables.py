@@ -6,16 +6,28 @@ from django.utils.safestring import mark_safe
 
 class ReportDetailTable(tables.Table):
 	symbol = tables.Column()
+	percentChange = tables.Column()
+	fiftyTwoWkHigh = tables.Column()
+	fiftyTwoWkLow = tables.Column()
 
 	def render_symbol(self,value):
 		
 		stock_url = reverse("stock_detail", args=[value])
-		return mark_safe('''<a href="%s" class="tbl_icon edit">%s</a>''' % (stock_url, value))
+		return  mark_safe('<a href="{}" >{}</a>'.format(stock_url, value))
+
+	def render_percentChange(self, value):
+		return "{} %".format(value)
+
+	def render_fiftyTwoWkHigh(self, value):
+		return "{} %".format(value)
+
+	def render_fiftyTwoWkLow(self, value):
+		return "{} %".format(value)
 
 	class Meta:
 		model = Stock
-		sequence = ('symbol', 'close_price','avgVolume','netChange', 'percentChange','fiftyTwoWkHigh','fiftyTwoWkLow','name')
-		exclude = ('id','open_price','high_price','low_price','twentyDayAvgVol ' )
+		sequence = ('symbol', 'close_price','avgVolume', 'percentChange', 'netChange','fiftyTwoWkHigh','fiftyTwoWkLow','name')
+		exclude = ('id','open_price','high_price','low_price','twentyDayAvgVol','lastPrice' )
 		template_name = 'django_tables2/bootstrap.html'
 
 

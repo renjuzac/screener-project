@@ -4,7 +4,7 @@ import pytz
 
 from reports.models import Report, Scan, Stock
 from screentools.stocks import scan
-from screentools.stocks import fetch_barchart
+from screentools.stocks import fetch
 
 
 def is_update_required(last_updated_at):
@@ -37,19 +37,18 @@ def is_update_required(last_updated_at):
 # https://howchoo.com/g/ywi5m2vkodk/working-with-datetime-objects-and-timezones-in-python
 
 
-def update_report(report_scan_function, report_id):
+def update_report(report_id):
 	report = Report.objects.filter(id__exact=report_id).get()
+	scanner = report.factor.function
+
 	growth_stocks_list = scan.scan_on_growth()
-	stock_quotes  = fetch_barchart.getquote(symbols=growth_stocks_list)
-	print(len(stock_quotes))
+	stock_quotes  = fetch.getquote(symbols=growth_stocks_list)
+
 	for entry in stock_quotes:
 		stock, created = Stock.objects.get_or_create(symbol=entry['symbol'])
-		print(entry['symbol'],Stock.objects.count())
-#			stock = Stock()
-#		stock.symbol = entry['symbol']
 		stock.name = entry['name']
-		stock.fiftyTwoWkHigh = entry['fiftyTwoWkHigh']
-		stock.fiftyTwoWkLow = entry['fiftyTwoWkLow']
+		stock.fiftyTwoWkHigh = round((entry['fiftyTwoWkHigh'] - entry['close'])*100 / entry['close'],2) # save as percentage
+		stock.fiftyTwoWkLow = round((entry['close'] - entry['fiftyTwoWkLow'])*100 / entry['close'],2)
 		stock.avgVolume = entry['avgVolume']
 		stock.twentyDayAvgVol = entry['twentyDayAvgVol']
 		stock.exchange = entry['exchange']
