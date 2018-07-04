@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -21,7 +22,7 @@ class Stock(models.Model):
 	last_update = models.DateTimeField(auto_now=True)
 
 	def get_absolute_url(self):
-		return reverse('stock-detail', args=[str(self.symbol)])
+		return reverse('stock_detail', args=[str(self.symbol)])
 
 	def __str__(self):
 		return '{}'.format(self.symbol)

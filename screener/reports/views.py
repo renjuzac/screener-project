@@ -4,9 +4,13 @@ from django.shortcuts import render
 from .models import Report, Scan, Stock
 from django.core.serializers import serialize
 
+from django_tables2 import RequestConfig
+from .tables import ReportDetailTable
 
 from screentools.stocks import scan
 from screentools.stocks import util
+
+
 
 
 stocks = scan.scan_on_growth()
@@ -33,8 +37,13 @@ def report_detail(request, id=1):
 	response = {}
 	response['name'] = report.name
 	response['factor'] = ""
-	response['stocks'] = report.stocks.values()
+#	response['stocks'] = report.stocks.values()
 	response['last_update'] = report.last_update
+
+	table = ReportDetailTable(report.stocks.values())
+	RequestConfig(request).configure(table)
+	response['stocks'] = table
+
 
 	return render(request, "report-detail.html" ,context = {"report_detail":response})
 
