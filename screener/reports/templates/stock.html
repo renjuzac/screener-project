@@ -25,8 +25,6 @@
 {% block content %}
 <h3>{{price_data.symbol}}</h3>
 
-<div class="row">
-  <div class="column">
   	<table>
 	{% for key,value in price_data.items %}
   	<tr>
@@ -36,22 +34,20 @@
   {% endfor %}
 </table>
 
-  </div>
-  <div class="column">
 
 
 
 <!-- TradingView Widget BEGIN -->
 <div class="tradingview-widget-container">
   <div id="tradingview_f38d2"></div>
-  <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/NASDAQ-{{price_data.symbol}}/" rel="noopener" target="_blank"><span class="blue-text">{{price_data.symbol}} chart</span></a> by TradingView</div>
+  <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/{{price_data.exchange}}-{{price_data.symbol}}/" rel="noopener" target="_blank"><span class="blue-text">{{price_data.symbol}} chart</span></a> by TradingView</div>
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
   <script type="text/javascript">
   new TradingView.widget(
   {
-  "width": 800,
-  "height": 500,
-  "symbol": "NASDAQ:{{price_data.symbol}}",
+  "width": 600,
+  "height": 400,
+  "symbol": "{{price_data.exchange}}:{{price_data.symbol}}",
   "interval": "D",
   "timezone": "America/Los_Angeles",
   "theme": "Light",
@@ -71,7 +67,5 @@
 </div>
 </div>
 <!-- TradingView Widget END -->
-</div>
-
 
 {% endblock %}

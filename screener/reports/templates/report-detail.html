@@ -5,39 +5,8 @@
 <p>
 <h3>{{report_detail.name}}</h3>
 
-<div class="row">
-  <div class="column">
+{% render_table report_detail.stocks %}
 
- {% comment "Manual table creation" %}
-
-  	<table border="1">
-  	<tr>
-
-		{% for key in report_detail.stocks.0.keys %}
-    		<td>{{key}}</td> 
-    	{% endfor %}
-	</tr>
-
-	{% for stock in report_detail.stocks %}
-		<tr>
-			{% for key,value in stock.items %}
-    			<td>{{value}}</td> 
-  			{% endfor %}
-  	 	</tr>
-
-  	{% endfor %}
- 	</table>
-
-
-
-{% endcomment %}
-
-
-	{% render_table report_detail.stocks %}
-
-
-  </div>
-  <div class="column">
 
 </p>
 {% endblock %}
