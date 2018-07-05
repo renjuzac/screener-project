@@ -5,6 +5,7 @@ import pytz
 from reports.models import Report, Scan, Stock
 from screentools.stocks import scan
 from screentools.stocks import fetch
+from screentools.stocks import screendata
 
 
 def is_update_required(last_updated_at):
@@ -37,39 +38,54 @@ def is_update_required(last_updated_at):
 # https://howchoo.com/g/ywi5m2vkodk/working-with-datetime-objects-and-timezones-in-python
 
 
+def meets_min_stock_criteria(stock):
+	'''
+	Close > $10
+	Volume > 1M
+	'''
+	return (stock['close'] > 10 and stock['avgVolume'] > 750000)
+
+
 def update_report(report_id):
 	report = Report.objects.filter(id__exact=report_id).get()
-	scanner = report.factor.function
+	scannerfn = report.factor.function
 
-	growth_stocks_list = scan.scan_on_growth()
-	stock_quotes  = fetch.getquote(symbols=growth_stocks_list)
+#	function=getattr(scan,scannerfn) 
+	function=getattr(screendata,scannerfn) 
 
+	stocks_list = function()
+
+#	growth_stocks_list = scan.scan_on_growth()
+	stock_quotes  = fetch.getquote(symbols=stocks_list)
 	for entry in stock_quotes:
-		stock, created = Stock.objects.get_or_create(symbol=entry['symbol'])
-		stock.name = entry['name']
-		stock.fiftyTwoWkHigh = round((entry['fiftyTwoWkHigh'] - entry['close'])*100 / entry['close'],2) # save as percentage
-		stock.fiftyTwoWkLow = round((entry['close'] - entry['fiftyTwoWkLow'])*100 / entry['close'],2)
-		stock.avgVolume = entry['avgVolume']
-		stock.twentyDayAvgVol = entry['twentyDayAvgVol']
-		stock.exchange = entry['exchange']
-		stock.lastPrice = entry['lastPrice']
-		stock.netChange = entry['netChange']
-		stock.percentChange = entry['percentChange']
-		stock.open_price = entry['open']
-		stock.high_price = entry['high']
-		stock.low_price = entry['low']
-		stock.close_price = entry['close']
-		stock.volume = entry['volume']
+		if meets_min_stock_criteria(entry):
+			stock, created = Stock.objects.get_or_create(symbol=entry['symbol'])
+			stock.name = entry['name']
+			stock.fiftyTwoWkHigh = round((entry['fiftyTwoWkHigh'] - entry['close'])*100 / entry['close'],2) # save as percentage
+			stock.fiftyTwoWkLow = round((entry['close'] - entry['fiftyTwoWkLow'])*100 / entry['close'],2)
+			stock.avgVolume = entry['avgVolume']
+			stock.twentyDayAvgVol = entry['twentyDayAvgVol']
+			stock.exchange = entry['exchange']
+			stock.lastPrice = entry['lastPrice']
+			stock.netChange = entry['netChange']
+			stock.percentChange = entry['percentChange']
+			stock.open_price = entry['open']
+			stock.high_price = entry['high']
+			stock.low_price = entry['low']
+			stock.close_price = entry['close']
+			stock.volume = entry['volume']
 
-		stock.save()
-		report.stocks.add(stock)
+			stock.save()
+			report.stocks.add(stock)
 
-		utc_now = pytz.utc.localize(datetime.datetime.utcnow())
-		pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
-		report.last_update = pst_now
-		report.save()
+			utc_now = pytz.utc.localize(datetime.datetime.utcnow())
+			pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
+			report.last_update = pst_now
+			report.save()
 
 # https://djangobook.com/django-models-basic-data-access/
 # https://stackoverflow.com/questions/4075190/what-is-getattr-exactly-and-how-do-i-use-it
 # https://ubuntuforums.org/showthread.php?t=1110989
+# https://ubuntuforums.org/showthread.php?t=1110989
+# https://stackoverflow.com/questions/4075190/what-is-getattr-exactly-and-how-do-i-use-it
 

@@ -1,31 +1,11 @@
 {% extends "base_generic.html" %}
 
-  {% block title %}
-  <title>Detailed Stock Report</title>
-  <style>
-.column {
-    float: left;
-}
-
-.left {
-    width: 25%;
-}
-
-.right {
-    width: 75%;
-}
-</style>
-
-
-
-
-  {% endblock %}
 
 
 {% block content %}
 <h3>{{price_data.symbol}}</h3>
 
-  	<table>
+  	<table class="table">
 	{% for key,value in price_data.items %}
   	<tr>
     <td>{{ key}}</td>
