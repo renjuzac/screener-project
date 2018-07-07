@@ -23,7 +23,6 @@ stocks = scan.scan_on_growth()
 def index(request):
 	reports = Report.objects.all()
 	stocks = scan.scan_on_growth()
-	print(stocks)
 	return render(request, "index.html" ,context = {"reports":reports})
 
 
@@ -33,7 +32,7 @@ def report_detail(request, id=1):
 #	if util.is_update_required(report.last_update):
 	util.update_report(report_id= id)
 
-	response = {}
+	response = dict()
 	response['name'] = report.name
 	response['factor'] = ""
 	response['last_update'] = report.last_update

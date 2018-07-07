@@ -43,7 +43,10 @@ def meets_min_stock_criteria(stock):
 	Close > $10
 	Volume > 1M
 	'''
-	return (stock['close'] > 10 and stock['avgVolume'] > 750000)
+	try: 
+		return (stock['close'] > 10 and stock['avgVolume'] > 750000)
+	except TypeError:
+		return False
 
 
 def update_report(report_id):
@@ -54,6 +57,7 @@ def update_report(report_id):
 	function=getattr(screendata,scannerfn) 
 
 	stocks_list = function()
+
 
 #	growth_stocks_list = scan.scan_on_growth()
 	stock_quotes  = fetch.getquote(symbols=stocks_list)
@@ -74,6 +78,7 @@ def update_report(report_id):
 			stock.low_price = entry['low']
 			stock.close_price = entry['close']
 			stock.volume = entry['volume']
+			stock.aquirersMultiple = fetch.get_aq_multiple_stock(entry['symbol'])
 
 			stock.save()
 			report.stocks.add(stock)

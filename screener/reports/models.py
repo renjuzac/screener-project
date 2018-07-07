@@ -9,6 +9,8 @@ class Stock(models.Model):
 	fiftyTwoWkHigh = models.FloatField(null=True, blank=True)
 	fiftyTwoWkLow = models.FloatField(null=True, blank=True)
 	avgVolume = models.FloatField(null=True, blank=True)
+	aquirersMultiple = models.FloatField(null=True, blank=True)
+	close_price = models.FloatField(null=True, blank=True)
 	twentyDayAvgVol = models.FloatField(null=True, blank=True)
 	exchange = models.CharField(max_length=20,null=True, blank=True)	
 	lastPrice = models.FloatField(null=True, blank=True)
@@ -17,9 +19,9 @@ class Stock(models.Model):
 	open_price = models.FloatField(null=True, blank=True)
 	high_price = models.FloatField(null=True, blank=True)
 	low_price = models.FloatField(null=True, blank=True)
-	close_price = models.FloatField(null=True, blank=True)
 	volume = models.IntegerField(null=True, blank=True)
 	last_update = models.DateTimeField(auto_now=True)
+
 
 	def get_absolute_url(self):
 		return reverse('stock_detail', args=[str(self.symbol)])

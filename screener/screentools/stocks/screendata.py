@@ -3,7 +3,6 @@ from screentools.stocks import  scraper
 
 def stocks_52wk_high():
 	stocks = scraper.stocks_52wk_highlow()
-	print(stocks['high'])
 	return stocks['high']
 
 def stocks_52wk_low():

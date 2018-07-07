@@ -37,11 +37,15 @@ def stocks_52wk_highlow(high=True):
             if  "Lows" in row.text:
                 Highs = False
             if atag and Highs:
-                HighStocks.append(atag['href'].split("=")[1])
+                ticker = atag['href'].split("=")[1]
+                if ticker.isalpha():
+                    HighStocks.append(ticker)
             elif atag and not Highs:
-                LowStocks.append(atag['href'].split("=")[1])
+                ticker = atag['href'].split("=")[1]
+                if ticker.isalpha():
+                    LowStocks.append(ticker)
 
-    results = {}
+    results = dict()
 
     results['high'] = HighStocks
     results['low'] = LowStocks
@@ -49,10 +53,6 @@ def stocks_52wk_highlow(high=True):
     return results
 
 
-if __name__ == "__main__":
-    tickers = stocks_52wk_highlow()
-    print(tickers['high'])
-    print(tickers['low'])
 
 
 #    Return whole table without split
