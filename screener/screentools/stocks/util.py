@@ -17,13 +17,19 @@ def is_update_required(last_updated_at):
 	afternoon3pm = datetime.time(hour=15, minute=00)
 	today3pm = datetime.datetime.combine(today, afternoon3pm,pytz.timezone("America/Los_Angeles"))
 
+	yesterday = datetime.date.today () - datetime.timedelta (days= 1)
+	yesterday3pm = datetime.datetime.combine(yesterday, afternoon3pm,pytz.timezone("America/Los_Angeles"))
+
 	# print(today3pm)
 	# print(report.last_update -pst_now)
 
 
 
+
 	if today.weekday() < 6 :   # Monday - Friday
-		if last_updated_at < today3pm:
+		if last_updated_at < today3pm and pst_now > today3pm:  # was last updated earlier than 3pm today 
+			return True
+		if last_updated_at < yesterday3pm and pst_now < today3pm: #wasnt updated yesterday
 			return True
 
 	if today.weekday() in [6,7] :   # Saturday - Sunday 

@@ -30,6 +30,7 @@ def index(request):
 def report_detail(request, id=1):
 	report = Report.objects.filter(id__exact=id).get()
 
+
 	if util.is_update_required(report.last_update):
 		util.update_report(report_id= id)
 
