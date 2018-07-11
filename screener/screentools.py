@@ -1,5 +1,7 @@
 from screentools.stocks import scan
 from screentools.stocks import fetch
+from screentools.stocks import screendata
+
 
 
 
@@ -32,7 +34,18 @@ from screentools.stocks import fetch
 # print(len(stock_quotes))
 # print(stock_quotes)
 
-stock_list ='PYPL'
-print(fetch.get_aq_multiple_stock(stock_list))
+# stock_list ='PYPL'
+#print(fetch.get_aq_multiple_stock(stock_list))
+
+# print(fetch.get_metadata(stock_list))
+
+
+ # stk = fetch.get_stocks_with_declining_revenue(percent=0)
+# print(list(stk.keys()))
+
+
+res = screendata.scan_for_momentum()
+
+print(res)
 
 

@@ -3,6 +3,7 @@ import json
 from django.shortcuts import render
 from .models import Report, Scan, Stock
 from django.core.serializers import serialize
+from django.core.exceptions import ObjectDoesNotExist
 
 from django_tables2 import RequestConfig
 from .tables import ReportDetailTable
@@ -29,8 +30,8 @@ def index(request):
 def report_detail(request, id=1):
 	report = Report.objects.filter(id__exact=id).get()
 
-#	if util.is_update_required(report.last_update):
-	util.update_report(report_id= id)
+	if util.is_update_required(report.last_update):
+		util.update_report(report_id= id)
 
 	response = dict()
 	response['name'] = report.name
@@ -44,7 +45,12 @@ def report_detail(request, id=1):
 	return render(request, "report-detail.html" ,context = {"report_detail":response})
 
 def stock_detail(request, symbol):
-	response = serialize('json', [Stock.objects.filter(symbol__iexact=symbol).get()])
+	try:
+		stock = Stock.objects.filter(symbol__iexact=symbol).get()
+	except ObjectDoesNotExist:
+		util.update_stock(symbol=symbol)
+		stock = Stock.objects.filter(symbol__iexact=symbol).get()
+	response = serialize('json', [stock])
 	response = json.loads(response)[0]['fields']
 	return render(request, "stock.html" ,context = {"price_data":response})
 

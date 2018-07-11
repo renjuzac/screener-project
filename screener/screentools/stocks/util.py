@@ -48,39 +48,46 @@ def meets_min_stock_criteria(stock):
 	except TypeError:
 		return False
 
+def update_stock(symbol,entry=None):
+		if not entry:
+			entry  = fetch.getquote(symbols=[symbol])[0]
+		stock, created = Stock.objects.get_or_create(symbol=symbol)
+		stock.name = entry['name']
+		stock.fiftyTwoWkHigh = round((entry['fiftyTwoWkHigh'] - entry['close'])*100 / entry['close'],2) # save as percentage
+		stock.fiftyTwoWkLow = round((entry['close'] - entry['fiftyTwoWkLow'])*100 / entry['close'],2)
+		stock.avgVolume = entry['avgVolume']
+		stock.twentyDayAvgVol = entry['twentyDayAvgVol']
+		stock.exchange = entry['exchange']
+		stock.lastPrice = entry['lastPrice']
+		stock.netChange = entry['netChange']
+		stock.percentChange = entry['percentChange']
+		stock.open_price = entry['open']
+		stock.high_price = entry['high']
+		stock.low_price = entry['low']
+		stock.close_price = entry['close']
+		stock.volume = entry['volume']
+		stock.aquirersMultiple = fetch.get_aq_multiple_stock(symbol)
+		stock.one_yr_change = round(fetch.get_one_yr_change(symbol)*100 ,2)
+		stock.save()
+		return stock
+
+
 
 def update_report(report_id):
 	report = Report.objects.filter(id__exact=report_id).get()
-	scannerfn = report.factor.function
+	scannerfn = report.factor.function      # Function name stored in model
 
 #	function=getattr(scan,scannerfn) 
-	function=getattr(screendata,scannerfn) 
+	function=getattr(screendata,scannerfn)  # Get the function
 
-	stocks_list = function()
+	stocks_list = function()     # Call the function 
 
 
 #	growth_stocks_list = scan.scan_on_growth()
 	stock_quotes  = fetch.getquote(symbols=stocks_list)
 	for entry in stock_quotes:
 		if meets_min_stock_criteria(entry):
-			stock, created = Stock.objects.get_or_create(symbol=entry['symbol'])
-			stock.name = entry['name']
-			stock.fiftyTwoWkHigh = round((entry['fiftyTwoWkHigh'] - entry['close'])*100 / entry['close'],2) # save as percentage
-			stock.fiftyTwoWkLow = round((entry['close'] - entry['fiftyTwoWkLow'])*100 / entry['close'],2)
-			stock.avgVolume = entry['avgVolume']
-			stock.twentyDayAvgVol = entry['twentyDayAvgVol']
-			stock.exchange = entry['exchange']
-			stock.lastPrice = entry['lastPrice']
-			stock.netChange = entry['netChange']
-			stock.percentChange = entry['percentChange']
-			stock.open_price = entry['open']
-			stock.high_price = entry['high']
-			stock.low_price = entry['low']
-			stock.close_price = entry['close']
-			stock.volume = entry['volume']
-			stock.aquirersMultiple = fetch.get_aq_multiple_stock(entry['symbol'])
-
-			stock.save()
+			stock = update_stock(symbol=entry['symbol'],entry=entry)
 			report.stocks.add(stock)
 
 			utc_now = pytz.utc.localize(datetime.datetime.utcnow())

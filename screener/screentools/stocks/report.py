@@ -1,9 +1,10 @@
 # High Growth
 # 52 Week Low
 # 52 Week high
-# In the news
-# Sudden drop
-# Analyst upgrades
+# Big movers of the day
+# Analyst upgrades /downgrades
+# Price Momentum
+# Bad earnings
 
 
 def report_52wkhigh():

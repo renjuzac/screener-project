@@ -23,19 +23,19 @@ def get_url(url):
 
 
 
-
-
-def get_stocks_with_revenue_growth_over(percent ):
-    ''' e.g.  percent="0.3"  (is 30% )
-    API returns first 150 by default
-    API e.g.  'result_count': 714, 'page_size': 100, 'current_page': 1, 'total_pages': 8,'''
+def get_stocks(volume,min_price,revenue_growth,growing=True):
     page_number = 1
     total_pages = 1
-    base_url = "https://api.intrinio.com/securities/search?conditions=revenuegrowth~gt~{}&page_number={}"
+    if growing:
+        comparison_operator = "gt"
+    else:
+        comparison_operator = "lt"
+    base_url ="https://api.intrinio.com/securities/search?conditions=revenuegrowth~{}~{},average_daily_volume~gt~{},close_price~gt~{}&page_number={}"
+
     try:
         stocks = {}
         while page_number <= total_pages:
-            search_url = base_url.format(percent, page_number)
+            search_url = base_url.format(comparison_operator, revenue_growth, volume, min_price, page_number)
             results = get_url(search_url)
             total_pages = results["total_pages"]
             for item in results["data"]:
@@ -47,6 +47,23 @@ def get_stocks_with_revenue_growth_over(percent ):
     except Exception as e:
         print ("{}Error fetching data from server {}".format(e,base_url))
         return {}
+
+def get_stocks_with_declining_revenue(percent= -1):
+    return get_stocks(volume=1000000,min_price=25,revenue_growth=percent, growing=False)
+
+
+def get_stocks_with_revenue_growth_over(percent):
+    ''' e.g.  percent="0.3"  (is 30% )
+    API returns first 150 by default
+    API e.g.  'result_count': 714, 'page_size': 100, 'current_page': 1, 'total_pages': 8,'''
+    return get_stocks(volume=1000000,min_price=20,revenue_growth=percent, growing=True)
+
+def get_stocks_passing_minimum_criteria(percent = 0):
+    ''' Minimum criteria for momentum scan 
+    '''
+    return get_stocks(volume=1000000,min_price=20,revenue_growth=percent, growing=True)
+
+
 
 def get_stock_price_and_vol(stock_list):
     base_url = "https://api.intrinio.com/securities/search?conditions=close_price~gt~15,average_daily_volume~gt~1000000&page_number={}"
@@ -63,6 +80,15 @@ def get_stock_price_and_vol(stock_list):
         page_number += 1
 
     return stocks
+
+
+
+
+
+
+
+
+
 
 
 

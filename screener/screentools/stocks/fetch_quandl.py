@@ -56,4 +56,21 @@ def get_aq_multiple_stock(stock):
 	return result 
 
 
+def get_metadata(stock):
+	ev_opinc_url = "https://www.quandl.com/api/v3/datatables/SHARADAR/TICKERS.json?ticker={}&qopts.columns=exchange,sicsector,sicindustry,famaindustry,scalerevenue&api_key={}"
+	ev_opinc_url = ev_opinc_url.format(stock, quandl_api_key)
+	results = get_url(ev_opinc_url)
 
+	tabledata = results["datatable"]["data"] 
+	tablecolumns = results["datatable"]["columns"] 
+
+	res = {}
+
+	for colname,data in zip(tablecolumns,tabledata[-1]):
+		res[colname["name"]] = data
+
+	return res
+
+
+
+# FCF Debt AQM history 

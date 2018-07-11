@@ -15,18 +15,20 @@
 </table>
 
 
+<!-- Debt ,FCF , AQM Trend   -->
+
 
 
 <!-- TradingView Widget BEGIN -->
 <div class="tradingview-widget-container">
-  <div id="tradingview_f38d2"></div>
-  <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/{{price_data.exchange}}-{{price_data.symbol}}/" rel="noopener" target="_blank"><span class="blue-text">{{price_data.symbol}} chart</span></a> by TradingView</div>
+  <div id="tradingview_c2271"></div>
+  <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/"{{price_data.exchange}}-{{price_data.symbol}}"/" rel="noopener" target="_blank"><span class="blue-text">"{{price_data.exchange}}:{{price_data.symbol}}" chart</span></a> by TradingView</div>
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
   <script type="text/javascript">
   new TradingView.widget(
   {
-  "width": 600,
-  "height": 400,
+  "width": 980,
+  "height": 610,
   "symbol": "{{price_data.exchange}}:{{price_data.symbol}}",
   "interval": "D",
   "timezone": "America/Los_Angeles",
@@ -35,17 +37,27 @@
   "locale": "en",
   "toolbar_bg": "#f1f3f6",
   "enable_publishing": false,
+  "withdateranges": false,
   "hide_side_toolbar": false,
   "allow_symbol_change": true,
+  "save_image": false,
+  "details": false,
+  "calendar": false,
   "studies": [
     "MASimple@tv-basicstudies"
   ],
-  "container_id": "tradingview_f38d2"
+  "container_id": "tradingview_c2271"
 }
   );
   </script>
 </div>
-</div>
 <!-- TradingView Widget END -->
+
+
+
+
+
+
+
 
 {% endblock %}
