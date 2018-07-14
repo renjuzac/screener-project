@@ -33,6 +33,9 @@ def get_stock_price_and_vol(stock_list):
 def get_aq_multiple_stock(stock):
 	return fetch_quandl.get_aq_multiple_stock(stock)
 
+def	get_aq_multiple_stock_list(stocklist):
+	return fetch_quandl.get_aq_multiple_stock_list(stocklist)
+
 def get_metadata(stock):
 	return fetch_quandl.get_metadata(stock)
 

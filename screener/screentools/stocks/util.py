@@ -54,7 +54,7 @@ def meets_min_stock_criteria(stock):
 	except TypeError:
 		return False
 
-def update_stock(symbol,entry=None):
+def update_stock(symbol,entry=None , aqm=None):
 		if not entry:
 			entry  = fetch.getquote(symbols=[symbol])[0]
 		stock, created = Stock.objects.get_or_create(symbol=symbol)
@@ -72,7 +72,10 @@ def update_stock(symbol,entry=None):
 		stock.low_price = entry['low']
 		stock.close_price = entry['close']
 		stock.volume = entry['volume']
-		stock.aquirersMultiple = fetch.get_aq_multiple_stock(symbol)
+		if aqm:
+			stock.aquirersMultiple = aqm[symbol]
+		else:
+			stock.aquirersMultiple = fetch.get_aq_multiple_stock(symbol)
 		stock.one_yr_change = round(fetch.get_one_yr_change(symbol)*100 ,2)
 		stock.save()
 		return stock
@@ -88,12 +91,27 @@ def update_report(report_id):
 
 	stocks_list = function()     # Call the function 
 
+	aqm_values = fetch.get_aq_multiple_stock_list(stocks_list)
+
+	if report.is_a_value_scan:
+
+		value_stocks_list = []
+
+		for stock in stocks_list:
+			try:
+				if aqm_values[stock] > 0 and aqm_values[stock] < 30:    # pick aqm less than 30 
+					value_stocks_list.append(stock) 
+			except KeyError:
+				continue
+
+		stocks_list = value_stocks_list
+
 
 #	growth_stocks_list = scan.scan_on_growth()
 	stock_quotes  = fetch.getquote(symbols=stocks_list)
 	for entry in stock_quotes:
 		if meets_min_stock_criteria(entry):
-			stock = update_stock(symbol=entry['symbol'],entry=entry)
+			stock = update_stock(symbol=entry['symbol'],entry=entry , aqm = aqm_values)
 			report.stocks.add(stock)
 
 			utc_now = pytz.utc.localize(datetime.datetime.utcnow())
