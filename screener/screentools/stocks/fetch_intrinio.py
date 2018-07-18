@@ -82,7 +82,44 @@ def get_stock_price_and_vol(stock_list):
     return stocks
 
 
+def get_revenue_growth(stock_list):
+    base_url = "https://api.intrinio.com/data_point?identifier={}&item=revenuegrowth&page_number={}"
+    stocks = {}
+    page_number = 1
 
+
+
+    if len(stock_list) == 1 :
+        search_url = base_url.format(stock_list[0],page_number)
+        results = get_url(search_url)
+        stocks.update({results['identifier']: results['value']})
+        return stocks
+
+
+    chunksize = 100      # Max supported 150  
+    for i in range(0, len(stock_list), chunksize):
+        symbolchunk = stock_list[i:i+chunksize]
+
+        page_number = 1
+        total_pages = 1
+
+        stocklist_string = ""
+
+        for stock in symbolchunk:
+            stocklist_string = stocklist_string  + stock + ","
+
+
+        while page_number <= total_pages:
+            search_url = base_url.format(stocklist_string, page_number)
+            print(search_url)
+            results = get_url(search_url)
+            print(results)
+            total_pages = results.get("total_pages", 1)
+            for item in results["data"]:
+                stocks.update({item['identifier']: item['value']})
+            page_number += 1
+
+    return stocks
 
 
 

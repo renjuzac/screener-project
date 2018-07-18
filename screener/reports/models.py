@@ -11,6 +11,7 @@ class Stock(models.Model):
 	avgVolume = models.FloatField(null=True, blank=True)
 	aquirersMultiple = models.FloatField(null=True, blank=True)
 	one_yr_change = models.FloatField(null=True, blank=True)
+	revenue_growth = models.FloatField(null=True, blank=True)
 	close_price = models.FloatField(null=True, blank=True)
 	twentyDayAvgVol = models.FloatField(null=True, blank=True)
 	exchange = models.CharField(max_length=20,null=True, blank=True)	

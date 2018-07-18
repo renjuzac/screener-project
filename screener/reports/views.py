@@ -10,6 +10,7 @@ from .tables import ReportDetailTable
 
 from screentools.stocks import scan
 from screentools.stocks import util
+from screentools.stocks import fetch
 
 
 
@@ -53,5 +54,9 @@ def stock_detail(request, symbol):
 		stock = Stock.objects.filter(symbol__iexact=symbol).get()
 	response = serialize('json', [stock])
 	response = json.loads(response)[0]['fields']
+	stock_meta = fetch.get_metadata(symbol)
+	response.update(stock_meta)
 	return render(request, "stock.html" ,context = {"price_data":response})
+
+
 

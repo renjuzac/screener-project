@@ -105,4 +105,4 @@ def get_metadata(stock):
 
 
 
-# FCF Debt AQM history 
+# FCF , Debt , AQM  history , revenue growth history  

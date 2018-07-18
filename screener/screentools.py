@@ -34,19 +34,21 @@ from screentools.stocks import screendata
 # print(len(stock_quotes))
 # print(stock_quotes)
 
-stock_list =['PYPL','GOOGL','SRPT']
+stock_list =['SHOP']
 
 
-print("paypal",fetch.get_aq_multiple_stock('PYPL'))
-print("google",fetch.get_aq_multiple_stock('GOOGL'))
-print("sarepta",fetch.get_aq_multiple_stock('SRPT'))
-# print(fetch.get_metadata(stock_list))
+# print("paypal",fetch.get_aq_multiple_stock('PYPL'))
+# print("google",fetch.get_aq_multiple_stock('GOOGL'))
+# print("sarepta",fetch.get_aq_multiple_stock('SRPT'))
+# # print(fetch.get_metadata(stock_list))
 
 
- # stk = fetch.get_stocks_with_declining_revenue(percent=0)
+# stk = fetch.get_stocks_with_declining_revenue(percent=0)
 # print(list(stk.keys()))
 
-print(fetch.get_aq_multiple_stock_list(stock_list))
+# print(fetch.get_aq_multiple_stock_list(stock_list))
+
+print(fetch.get_revenue_growth(stock_list))
 
 #res = screendata.scan_for_momentum()
 
