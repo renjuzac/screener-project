@@ -34,8 +34,11 @@ from screentools.stocks import screendata
 # print(len(stock_quotes))
 # print(stock_quotes)
 
-stock_list =['SHOP']
+#stock_list =['JWN', 'NSC', 'OFG', 'OMAD', 'OMADU', 'PDI', 'PRTY', 'PFGC', 'PLNT', 'PRI', 'RLI', 'RWT', 'RWGEU', 'RMD', 'RST', 'RMT', 'SHAK', 'SHOP', 'SON', 'SQ']
 
+#stock_list = ['KMDA', 'KNSL', 'LFACW', 'LANC', 'LACQU', 'LSXMA', 'LINDW', 'LIND', 'LOB', 'LOGI', 'MASI', 'MEDP', 'MSFT', 'MRTX', 'MOR', 'NOVT', 'NVCR', 'OFLX', 'FLWS', 'OSPR']
+
+stock_list = ['BABA']
 
 # print("paypal",fetch.get_aq_multiple_stock('PYPL'))
 # print("google",fetch.get_aq_multiple_stock('GOOGL'))
@@ -48,7 +51,9 @@ stock_list =['SHOP']
 
 # print(fetch.get_aq_multiple_stock_list(stock_list))
 
-print(fetch.get_revenue_growth(stock_list))
+#print(fetch.get_revenue_growth(stock_list))
+
+print(fetch.get_enterprise_multiple(stock_list))
 
 #res = screendata.scan_for_momentum()
 

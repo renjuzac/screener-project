@@ -22,6 +22,32 @@ def get_url(url):
 
 
 
+def get_enterprise_multiple(stocklist):
+	# https://www.investopedia.com/terms/e/ev-ebitda.asp
+	evebitda_url = "https://www.quandl.com/api/v3/datatables/SHARADAR/SF1.json?ticker={}&dimension=MRQ&qopts.columns=ticker,evebitda&qopts.latest=1&api_key={}"
+	aqmresult = {}
+	stocklist_string = ""
+	for stock in stocklist:
+		stocklist_string = stocklist_string + "%2C" + stock
+
+
+	evebitda_url_formatted = evebitda_url.format(stocklist_string, quandl_api_key)
+	results = get_url(evebitda_url_formatted)
+
+	values = results["datatable"]["data"]
+
+	for value in values:
+		try:
+			ticker = value[0]
+			evebitda = value[1]
+		except IndexError:
+			continue
+
+		aqmresult[ticker] = evebitda
+
+	return aqmresult 
+
+
 
 def get_aq_multiple_stock(stock):
 
@@ -50,7 +76,7 @@ def get_aq_multiple_stock(stock):
 
 	try:
 		result = round(fundamentals["ev"] /fundamentals["opinc"],2)
-	except TypeError:
+	except (TypeError,ZeroDivisionError):
 		result = 0
 
 	return result 
@@ -81,7 +107,7 @@ def get_aq_multiple_stock_list(stocklist):
 		
 		try:
 			aqmresult[ticker] = round(ev/opinc, 2)   # ev /opinc
-		except TypeError:
+		except (TypeError,ZeroDivisionError):
 			aqmresult[stock] = 0
 
 	return aqmresult 
@@ -90,6 +116,9 @@ def get_aq_multiple_stock_list(stocklist):
 
 def get_metadata(stock):
 	ev_opinc_url = "https://www.quandl.com/api/v3/datatables/SHARADAR/TICKERS.json?ticker={}&qopts.columns=exchange,sicsector,sicindustry,famaindustry,scalerevenue&api_key={}"
+	
+
+
 	ev_opinc_url = ev_opinc_url.format(stock, quandl_api_key)
 	results = get_url(ev_opinc_url)
 
@@ -102,6 +131,62 @@ def get_metadata(stock):
 		res[colname["name"]] = data
 
 	return res
+
+
+def get_revenue_growth(stocklist):
+	revenue_url = "https://www.quandl.com/api/v3/datatables/SHARADAR/SF1.json?ticker={}&dimension=MRQ&qopts.columns=ticker,revenue&api_key={}"
+	revresult ={}
+	chunksize = 20        
+	for i in range(0, len(stocklist), chunksize):
+		symbolchunk = stocklist[i:i+chunksize]
+
+		stocklist_string = ""
+
+		for stock in symbolchunk:
+			stocklist_string = stocklist_string + "%2C" + stock
+
+
+		revenue_url_formatted = revenue_url.format(stocklist_string, quandl_api_key)
+		print(symbolchunk,revenue_url_formatted)
+
+		results = get_url(revenue_url_formatted)
+
+		values = results["datatable"]["data"]
+
+		current_ticker =""
+		current_revenue_list = []
+
+		for value in values:
+			try:
+				ticker = value[0]
+				revenue = value[1]
+				if not revenue:
+					raise TypeError   # null revenue
+				if current_ticker == "":
+					current_ticker = ticker
+
+				if current_ticker == ticker: 
+					current_revenue_list.append(revenue)
+				else:
+					revresult[current_ticker] = round(((current_revenue_list[-1] - current_revenue_list[-5])*100) / current_revenue_list[-5],2)
+					print("main",current_ticker,revresult[current_ticker])
+					current_ticker = ticker
+					current_revenue_list = []
+					current_revenue_list.append(revenue)
+			except (IndexError,ZeroDivisionError,TypeError):
+				revresult[current_ticker] = 0
+				current_ticker = ""  # zero revenue
+				continue
+
+		try:
+			revresult[current_ticker] = round(((current_revenue_list[-1] - current_revenue_list[-5])*100) / current_revenue_list[-5],2)
+			print(current_ticker,revresult[current_ticker])
+		except (ZeroDivisionError,IndexError,TypeError):
+			revresult[current_ticker] = 0
+
+	print(revresult)
+	return revresult
+
 
 
 

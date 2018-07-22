@@ -25,8 +25,11 @@ def get_stocks_with_declining_revenue(percent=0):
 def get_stocks_passing_minimum_criteria(percent = 0):
 	return fetch_intrinio.get_stocks_passing_minimum_criteria(percent = 0)
 
-def get_revenue_growth(stock_list):
-	return fetch_intrinio.get_revenue_growth(stock_list)
+#def get_revenue_growth(stock_list):
+#	return fetch_intrinio.get_revenue_growth(stock_list)
+
+def	get_revenue_growth(stocklist):
+	return fetch_quandl.get_revenue_growth(stocklist)
 
 
 def get_stock_price_and_vol(stock_list):
@@ -38,6 +41,9 @@ def get_aq_multiple_stock(stock):
 
 def	get_aq_multiple_stock_list(stocklist):
 	return fetch_quandl.get_aq_multiple_stock_list(stocklist)
+
+def get_enterprise_multiple(stocklist):
+	return fetch_quandl.get_enterprise_multiple(stocklist)
 
 def get_metadata(stock):
 	return fetch_quandl.get_metadata(stock)

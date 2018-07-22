@@ -72,20 +72,21 @@ def update_stock(symbol,entry=None , aqm=None, rev=None):
 		stock.low_price = entry['low']
 		stock.close_price = entry['close']
 		stock.volume = entry['volume']
-		if aqm:
-			try:
+		try:
+			if aqm:
 				stock.aquirersMultiple = aqm[symbol]
-			except KeyError:
+			else:
+			#stock.aquirersMultiple = fetch.get_aq_multiple_stock(symbol)
+				stock.aquirersMultiple = fetch.get_enterprise_multiple([symbol])[symbol]
+		except KeyError:
 				stock.aquirersMultiple = 0
-		else:
-			stock.aquirersMultiple = fetch.get_aq_multiple_stock(symbol)
 
 		try:
 			print(symbol, rev[symbol])
-			if rev:
-				stock.revenue_growth = round(rev[symbol]*100 ,2)
+			if rev and rev[symbol]:
+				stock.revenue_growth = rev[symbol]
 			else:
-				stock.revenue_growth = round((fetch.get_revenue_growth([symbol])[symbol])*100 ,2)
+				stock.revenue_growth = fetch.get_revenue_growth([symbol])[symbol]
 		except (KeyError,TypeError) as e:
 			stock.revenue_growth = 0
 	
@@ -106,7 +107,8 @@ def update_report(report_id):
 
 	stocks_list = function()     # Call the function 
 
-	aqm_values = fetch.get_aq_multiple_stock_list(stocks_list)
+#	aqm_values = fetch.get_aq_multiple_stock_list(stocks_list)
+	aqm_values = fetch.get_enterprise_multiple(stocks_list)
 
 	if report.is_a_value_scan:
 
