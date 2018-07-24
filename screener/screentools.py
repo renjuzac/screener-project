@@ -38,7 +38,7 @@ from screentools.stocks import screendata
 
 #stock_list = ['KMDA', 'KNSL', 'LFACW', 'LANC', 'LACQU', 'LSXMA', 'LINDW', 'LIND', 'LOB', 'LOGI', 'MASI', 'MEDP', 'MSFT', 'MRTX', 'MOR', 'NOVT', 'NVCR', 'OFLX', 'FLWS', 'OSPR']
 
-stock_list = ['BABA']
+stocklist = ['F']
 
 # print("paypal",fetch.get_aq_multiple_stock('PYPL'))
 # print("google",fetch.get_aq_multiple_stock('GOOGL'))
@@ -51,9 +51,10 @@ stock_list = ['BABA']
 
 # print(fetch.get_aq_multiple_stock_list(stock_list))
 
-#print(fetch.get_revenue_growth(stock_list))
+print(fetch.get_revenue_growth(stocklist))
 
-print(fetch.get_enterprise_multiple(stock_list))
+#print(fetch.get_enterprise_multiple(stock_list))
+#print(fetch.get_debt_to_equity(stocklist))
 
 #res = screendata.scan_for_momentum()
 

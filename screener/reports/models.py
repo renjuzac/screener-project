@@ -22,7 +22,7 @@ class Stock(models.Model):
 	high_price = models.FloatField(null=True, blank=True)
 	low_price = models.FloatField(null=True, blank=True)
 	volume = models.IntegerField(null=True, blank=True)
-	last_update = models.DateTimeField(auto_now=True)
+	last_update = models.DateTimeField(null=True)
 
 
 	def get_absolute_url(self):

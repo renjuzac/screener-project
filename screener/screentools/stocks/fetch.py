@@ -32,6 +32,10 @@ def	get_revenue_growth(stocklist):
 	return fetch_quandl.get_revenue_growth(stocklist)
 
 
+def	get_debt_to_equity(stocklist):
+	return fetch_quandl.get_debt_to_equity(stocklist)
+
+
 def get_stock_price_and_vol(stock_list):
     return fetch_intrinio.get_stock_price_and_vol(stock_list)
 

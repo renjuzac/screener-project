@@ -55,6 +55,7 @@ def meets_min_stock_criteria(stock):
 		return False
 
 def update_stock(symbol,entry=None , aqm=None, rev=None):
+		print("updating" , symbol)
 		if not entry:
 			entry  = fetch.getquote(symbols=[symbol])[0]
 		stock, created = Stock.objects.get_or_create(symbol=symbol)
@@ -82,18 +83,20 @@ def update_stock(symbol,entry=None , aqm=None, rev=None):
 				stock.aquirersMultiple = 0
 
 		try:
-			print(symbol, rev[symbol])
 			if rev and rev[symbol]:
 				stock.revenue_growth = rev[symbol]
 			else:
 				stock.revenue_growth = fetch.get_revenue_growth([symbol])[symbol]
 		except (KeyError,TypeError) as e:
 			stock.revenue_growth = 0
-	
+
 		stock.one_yr_change = round(fetch.get_one_yr_change(symbol)*100 ,2)
 
-
+		utc_now = pytz.utc.localize(datetime.datetime.utcnow())
+		pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
+		stock.last_update = pst_now
 		stock.save()
+
 		return stock
 
 

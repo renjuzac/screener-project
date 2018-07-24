@@ -48,6 +48,53 @@ def get_enterprise_multiple(stocklist):
 	return aqmresult 
 
 
+def get_fundamental_value(stocklist,fundamentallist):
+	fundamental_url = "https://www.quandl.com/api/v3/datatables/SHARADAR/SF1.json?ticker={}&dimension=MRQ&qopts.columns=ticker,{}&qopts.latest=1&api_key={}"
+	funresult = {}
+	stocklist_string = ""
+	fundamentallist_string = ""
+	for stock in stocklist:
+		stocklist_string = stocklist_string + "%2C" + stock
+
+	for fundamental in fundamentallist:
+		fundamentallist_string = fundamentallist_string + "," + fundamental
+	fundamentallist_string = fundamentallist_string.strip(",")
+
+
+	fundamental_url_formatted = fundamental_url.format(stocklist_string, fundamentallist_string, quandl_api_key)
+
+	print(fundamental_url_formatted)
+	results = get_url(fundamental_url_formatted)
+
+	print(results)
+
+	values = results["datatable"]["data"]
+
+	for value in values:
+		try:
+			ticker = value[0]
+			fundamental_val = value[1:]
+		except IndexError:
+			continue
+
+		funresult[ticker] = fundamental_val
+
+	return funresult 
+
+
+def get_debt_to_equity(stocklist):
+	res = get_fundamental_value(stocklist,["debt","equity"])
+	deres = {}
+	for stock in res.keys():
+		try:
+			deres[stock] = round(res[stock][0] / res[stock][1] ,2)
+		except(TypeError,ZeroDivisionError):
+			deres[stock] = 0
+	return deres
+
+
+
+
 
 def get_aq_multiple_stock(stock):
 

@@ -49,6 +49,9 @@ def report_detail(request, id=1):
 def stock_detail(request, symbol):
 	try:
 		stock = Stock.objects.filter(symbol__iexact=symbol).get()
+		if util.is_update_required(stock.last_update):
+			util.update_stock(symbol=symbol)
+			stock = Stock.objects.filter(symbol__iexact=symbol).get()
 	except ObjectDoesNotExist:
 		util.update_stock(symbol=symbol)
 		stock = Stock.objects.filter(symbol__iexact=symbol).get()
@@ -57,6 +60,23 @@ def stock_detail(request, symbol):
 	stock_meta = fetch.get_metadata(symbol)
 	response.update(stock_meta)
 	return render(request, "stock.html" ,context = {"price_data":response})
+
+
+def auto_report(request, type):
+	response = dict()
+
+	if str.lower(type) == "value":
+		stocks = Stock.objects.filter(aquirersMultiple__lte=20).filter(revenue_growth__gte=15).filter(one_yr_change__gte=25).filter(aquirersMultiple__gte=0)
+		response['name'] = "Value Stocks - Auto Generated"
+	else:
+		stocks = Stock.objects.filter(revenue_growth__gte=25).filter(one_yr_change__gte=25)
+		response['name'] = "Growth Stocks - Auto Generated"
+
+	table = ReportDetailTable(stocks.values())
+	RequestConfig(request).configure(table)
+	response['stocks'] = table
+
+	return render(request, "report-detail.html" ,context = {"report_detail":response})
 
 
 

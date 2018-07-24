@@ -1,15 +1,30 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h3>Reports</h3>
+<h3>Live Reports</h3>
 <p>
 <ul>
 {% for report in reports %}
-    <li><a href="{% url 'report_detail' report.id %}">{{ report.name }}</a></li>
+    <li><a href="{% url 'report_detail' report.id %}">{{ report.name }}</a> &emsp;  {{ report.last_update }}</li>
 {% endfor %}
 
 
 </ul>
 
 </p>
+
+<h3> Auto Generated Reports </h3>
+<p>
+
+<ul>
+
+    <li><a href="{% url 'auto_report' 'value' %}">Value</a> </li>
+    <li><a href="{% url 'auto_report' 'growth' %}">Growth</a> </li>
+
+
+
+</ul>
+
+
+</p>	
 {% endblock %}
