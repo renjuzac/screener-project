@@ -25,7 +25,7 @@ SECRET_KEY = 'ls+6ktu#s9eii9%l1&lhi0w3j6e2xt8!r077^om^x*%c#_f(9w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'glacial-sierra-28629.herokuapp.com']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost','127.0.0.1', 'glacial-sierra-28629.herokuapp.com']
 
 
 # Application definition
