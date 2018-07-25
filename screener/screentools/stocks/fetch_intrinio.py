@@ -1,18 +1,23 @@
 from datetime import timedelta
+import os
 
 #import requests
 import json
 
 from . import caching
-from ..config import username,password
+# from ..config import username,password
+
+
+INTRINIO_USERNAME = os.environ['INTRINIO_USERNAME']
+INTRINIO_PASSWORD = os.environ['INTRINIO_PASSWORD']
 
 ticker = "NTNX"
 
 
 def get_url(url):
     try:
-#        response = requests.get(url, auth=(username, password))
-        response = caching.session.get(url, auth=(username, password))
+#        response = requests.get(url, auth=(INTRINIO_USERNAME, INTRINIO_PASSWORD))
+        response = caching.session.get(url, auth=(INTRINIO_USERNAME, INTRINIO_PASSWORD))
         results = json.loads(response.text)
         return results
 

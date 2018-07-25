@@ -3,9 +3,9 @@
 import json
 
 from screentools.stocks.caching import session
-from screentools.config import barchart_api_key
+# from screentools.config import BARCHART_API_KEY
 
-barchart_api_key = "62ee527bc88e5383f47f67b551d75bda"
+BARCHART_API_KEY = "62ee527bc88e5383f47f67b551d75bda"
 
 symbols = ['AAPL', 'GOOGL']
 fields = ["fiftyTwoWkHigh", "fiftyTwoWkLow", "avgVolume", "twentyDayAvgVol"]
@@ -33,7 +33,7 @@ def getquote(symbols=symbols,fields=fields):
         for ticker in symbolchunk:
             symbolnames = symbolnames + "%2C" + ticker
 
-        getquote_url = getquote_url.format(apikey=barchart_api_key, symbolnames=symbolnames, fieldnames=fieldnames)
+        getquote_url = getquote_url.format(apikey=BARCHART_API_KEY, symbolnames=symbolnames, fieldnames=fieldnames)
         data = session.get(getquote_url)
         jsondata = json.loads(data.text)
 

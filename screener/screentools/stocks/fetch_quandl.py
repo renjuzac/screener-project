@@ -1,4 +1,8 @@
-from ..config import quandl_api_key
+# from ..config import QUANDL_API_KEY
+
+  
+
+import os
 
 from datetime import timedelta
 
@@ -7,6 +11,7 @@ import json
 
 from . import caching
 
+QUANDL_API_KEY = os.environ['QUANDL_API_KEY']
 
 
 def get_url(url):
@@ -31,7 +36,7 @@ def get_enterprise_multiple(stocklist):
 		stocklist_string = stocklist_string + "%2C" + stock
 
 
-	evebitda_url_formatted = evebitda_url.format(stocklist_string, quandl_api_key)
+	evebitda_url_formatted = evebitda_url.format(stocklist_string, QUANDL_API_KEY)
 	results = get_url(evebitda_url_formatted)
 
 	values = results["datatable"]["data"]
@@ -61,7 +66,7 @@ def get_fundamental_value(stocklist,fundamentallist):
 	fundamentallist_string = fundamentallist_string.strip(",")
 
 
-	fundamental_url_formatted = fundamental_url.format(stocklist_string, fundamentallist_string, quandl_api_key)
+	fundamental_url_formatted = fundamental_url.format(stocklist_string, fundamentallist_string, QUANDL_API_KEY)
 
 	print(fundamental_url_formatted)
 	results = get_url(fundamental_url_formatted)
@@ -102,7 +107,7 @@ def get_aq_multiple_stock(stock):
 #		return 0
 
 	ev_opinc_url = "https://www.quandl.com/api/v3/datatables/SHARADAR/SF1.json?ticker={}&dimension=MRY&&qopts.columns=ev,opinc&api_key={}"
-	ev_opinc_url = ev_opinc_url.format(stock, quandl_api_key)
+	ev_opinc_url = ev_opinc_url.format(stock, QUANDL_API_KEY)
 	results = get_url(ev_opinc_url)
 
 	headers = []
@@ -139,7 +144,7 @@ def get_aq_multiple_stock_list(stocklist):
 		stocklist_string = stocklist_string + "%2C" + stock
 
 
-	ev_opinc_url_formatted = ev_opinc_url.format(stocklist_string, quandl_api_key)
+	ev_opinc_url_formatted = ev_opinc_url.format(stocklist_string, QUANDL_API_KEY)
 	results = get_url(ev_opinc_url_formatted)
 
 	values = results["datatable"]["data"]
@@ -166,7 +171,7 @@ def get_metadata(stock):
 	
 
 
-	ev_opinc_url = ev_opinc_url.format(stock, quandl_api_key)
+	ev_opinc_url = ev_opinc_url.format(stock, QUANDL_API_KEY)
 	results = get_url(ev_opinc_url)
 
 	tabledata = results["datatable"]["data"] 
@@ -193,7 +198,7 @@ def get_revenue_growth(stocklist):
 			stocklist_string = stocklist_string + "%2C" + stock
 
 
-		revenue_url_formatted = revenue_url.format(stocklist_string, quandl_api_key)
+		revenue_url_formatted = revenue_url.format(stocklist_string, QUANDL_API_KEY)
 		print(symbolchunk,revenue_url_formatted)
 
 		results = get_url(revenue_url_formatted)

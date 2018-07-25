@@ -1,5 +1,5 @@
 #https://www.alphavantage.co/documentation/
-from ..config import quandl_api_key
+#from ..config import quandl_api_key
 
 from datetime import timedelta
 
