@@ -1,6 +1,7 @@
 import json
 
 from django.shortcuts import render
+from django.shortcuts import redirect
 from .models import Report, Scan, Stock
 from django.core.serializers import serialize
 from django.core.exceptions import ObjectDoesNotExist
@@ -77,6 +78,12 @@ def auto_report(request, type):
 	response['stocks'] = table
 
 	return render(request, "report-detail.html" ,context = {"report_detail":response})
+
+def clean(request):
+	Stock.objects.filter(revenue_growth__lte=10).delete()  # Low growth
+	Stock.objects.filter(one_yr_change__lte=5).delete()  # Non trending
+	Stock.objects.filter(aquirersMultiple__iexact=0).delete()  # No aquirers multiple data
+	return redirect('index')
 
 
 
