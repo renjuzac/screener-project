@@ -94,5 +94,8 @@ def clean(request):
 	Stock.objects.filter(aquirersMultiple__iexact=0).delete()  # No aquirers multiple data
 	return redirect('index')
 
+def updating(request):
+	return render(request, "updating.html", ,context = {})
+
 
 
