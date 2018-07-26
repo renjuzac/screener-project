@@ -38,7 +38,9 @@ def report_detail(request, id=1):
 
 	if util.is_update_required(report.last_update):
 		q = Queue(connection=conn)
-		result = q.enqueue(util.update_report, id)
+		print(q)
+		result = q.enqueue(util.update_report, id)   # https://devcenter.heroku.com/articles/python-rq
+		print(result)
 		# util.update_report(report_id= id)        # Blocking call 
 		return redirect('index')
 
