@@ -42,7 +42,7 @@ def report_detail(request, id=1):
 		result = q.enqueue(util.update_report, id)   # https://devcenter.heroku.com/articles/python-rq
 		print(result)
 		# util.update_report(report_id= id)        # Blocking call 
-		return redirect('index')
+		return redirect('updating')
 
 
 	response = dict()
