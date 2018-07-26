@@ -1,5 +1,8 @@
 import json
 
+from rq import Queue       # Heroku background processing
+from worker import conn    # Heroku background processing
+
 from django.shortcuts import render
 from django.shortcuts import redirect
 from .models import Report, Scan, Stock
@@ -34,7 +37,11 @@ def report_detail(request, id=1):
 
 
 	if util.is_update_required(report.last_update):
-		util.update_report(report_id= id)
+		q = Queue(connection=conn)
+		result = q.enqueue(util.update_report, id)
+		# util.update_report(report_id= id)        # Blocking call 
+		return redirect('index')
+
 
 	response = dict()
 	response['name'] = report.name

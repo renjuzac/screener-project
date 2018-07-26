@@ -140,4 +140,6 @@ DATABASES['default'].update(db_from_env)
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# https://stackoverflow.com/questions/973605/generating-insert-statements-from-an-sqlite-table
+
 

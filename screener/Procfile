@@ -1,1 +1,2 @@
 web: gunicorn screener.wsgi —-log-file -
+worker: python worker.py
