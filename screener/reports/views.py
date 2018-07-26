@@ -1,4 +1,5 @@
 import json
+import os
 
 from rq import Queue       # Heroku background processing
 from worker import conn    # Heroku background processing
@@ -15,6 +16,9 @@ from .tables import ReportDetailTable
 from screentools.stocks import scan
 from screentools.stocks import util
 from screentools.stocks import fetch
+
+
+LOCAL = bool( os.environ.get('DJANGO_LOCAL', True) )
 
 
 
@@ -37,12 +41,12 @@ def report_detail(request, id=1):
 
 
 	if util.is_update_required(report.last_update):
-		q = Queue(connection=conn)
-		print(q)
-		result = q.enqueue(util.update_report, id)   # https://devcenter.heroku.com/articles/python-rq
-		print(result)
-		# util.update_report(report_id= id)        # Blocking call 
-		return redirect('updating')
+		if LOCAL:
+			util.update_report(report_id= id)        # Local environment Blocking call 
+		else:
+			q = Queue(connection=conn)   #Heroku Worker
+			result = q.enqueue(util.update_report, id)   # https://devcenter.heroku.com/articles/python-rq
+			return redirect('updating')
 
 
 	response = dict()
