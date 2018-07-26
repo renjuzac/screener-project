@@ -4,7 +4,9 @@ import redis
 from rq import Worker, Queue, Connection
 
 import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "screener.settings")
 django.setup()
+
 
 
 listen = ['high', 'default', 'low']
