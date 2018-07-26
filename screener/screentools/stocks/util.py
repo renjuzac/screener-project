@@ -121,7 +121,7 @@ def update_report(report_id):
 			try:
 				if aqm_values[stock] > 0 and aqm_values[stock] < 30:    # pick aqm less than 30 
 					value_stocks_list.append(stock) 
-			except KeyError:
+			except (KeyError,TypeError):
 				continue
 
 		stocks_list = value_stocks_list
