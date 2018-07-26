@@ -5,7 +5,7 @@ from django.urls import reverse
 
 class Stock(models.Model):
 	symbol = models.CharField(max_length=20, unique=True)
-	name = models.CharField(max_length=20,null=True, blank=True)
+	name = models.CharField(max_length=50,null=True, blank=True)
 	fiftyTwoWkLow = models.FloatField(null=True, blank=True)
 	fiftyTwoWkHigh = models.FloatField(null=True, blank=True)
 	avgVolume = models.FloatField(null=True, blank=True)
