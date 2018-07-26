@@ -95,7 +95,7 @@ def clean(request):
 	return redirect('index')
 
 def updating(request):
-	return render(request, "updating.html", ,context = {})
+	return render(request, "updating.html", context = {})
 
 
 
