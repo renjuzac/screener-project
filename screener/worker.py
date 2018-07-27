@@ -7,7 +7,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "screener.settings")
 django.setup()
 
-
+# https://github.com/celery/django-celery-results/issues/20
 
 listen = ['high', 'default', 'low']
 

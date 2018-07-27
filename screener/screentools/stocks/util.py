@@ -27,15 +27,21 @@ def is_update_required(last_updated_at):
 
 
 	if today.weekday() < 6 :   # Monday - Friday
-		if last_updated_at < today3pm and pst_now > today3pm:  # was last updated earlier than 3pm today 
-			return True
-		if last_updated_at < yesterday3pm and pst_now < today3pm: #wasnt updated yesterday
+		try:
+			if last_updated_at < today3pm and pst_now > today3pm:  # was last updated earlier than 3pm today 
+				return True
+			if last_updated_at < yesterday3pm and pst_now < today3pm: #wasnt updated yesterday
+				return True
+		except TypeError:
 			return True
 
 	if today.weekday() in [6,7] :   # Saturday - Sunday 
 		last_friday = datetime.date.today () - datetime.timedelta (days= today.weekday() -5)
 		friday3pm = datetime.datetime.combine(last_friday, afternoon3pm,pytz.timezone("America/Los_Angeles"))
-		if last_updated_at < friday3pm:
+		try:
+			if last_updated_at < friday3pm:
+				return True
+		except TypeError:
 			return True
 
 	return False
@@ -60,8 +66,14 @@ def update_stock(symbol,entry=None , aqm=None, rev=None):
 			entry  = fetch.getquote(symbols=[symbol])[0]
 		stock, created = Stock.objects.get_or_create(symbol=symbol)
 		stock.name = entry['name']
-		stock.fiftyTwoWkHigh = round((entry['fiftyTwoWkHigh'] - entry['close'])*100 / entry['close'],2) # save as percentage
-		stock.fiftyTwoWkLow = round((entry['close'] - entry['fiftyTwoWkLow'])*100 / entry['close'],2)
+		try:
+			stock.fiftyTwoWkHigh = round((entry['fiftyTwoWkHigh'] - entry['close'])*100 / entry['close'],2) # save as percentage
+			stock.fiftyTwoWkLow = round((entry['close'] - entry['fiftyTwoWkLow'])*100 / entry['close'],2)
+		except ZeroDivisionError:
+			stock.fiftyTwoWkHigh = 0
+			stock.fiftyTwoWkLow = 0
+
+
 		stock.avgVolume = entry['avgVolume']
 		stock.twentyDayAvgVol = entry['twentyDayAvgVol']
 		stock.exchange = entry['exchange']

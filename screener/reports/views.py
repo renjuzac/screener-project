@@ -47,7 +47,7 @@ def report_detail(request, id=1):
 			q = Queue(connection=conn)   #Heroku Worker
 			result = q.enqueue(util.update_report, id)   # https://devcenter.heroku.com/articles/python-rq
 			return redirect('updating')
-
+			# https://devcenter.heroku.com/articles/request-timeout#long-polling-and-streaming-responses
 
 	response = dict()
 	response['name'] = report.name
