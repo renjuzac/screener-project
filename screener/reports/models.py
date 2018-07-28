@@ -12,6 +12,7 @@ class Stock(models.Model):
 	aquirersMultiple = models.FloatField(null=True, blank=True)
 	one_yr_change = models.FloatField(null=True, blank=True)
 	revenue_growth = models.FloatField(null=True, blank=True)
+	composite_Metric = models.FloatField(null=True, blank=True)
 	close_price = models.FloatField(null=True, blank=True)
 	twentyDayAvgVol = models.FloatField(null=True, blank=True)
 	exchange = models.CharField(max_length=20,null=True, blank=True)	
@@ -23,6 +24,7 @@ class Stock(models.Model):
 	low_price = models.FloatField(null=True, blank=True)
 	volume = models.IntegerField(null=True, blank=True)
 	last_update = models.DateTimeField(null=True)
+
 
 
 	def get_absolute_url(self):

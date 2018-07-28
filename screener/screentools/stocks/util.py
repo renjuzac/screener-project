@@ -85,6 +85,7 @@ def update_stock(symbol,entry=None , aqm=None, rev=None):
 		stock.low_price = entry['low']
 		stock.close_price = entry['close']
 		stock.volume = entry['volume']
+
 		try:
 			if aqm:
 				stock.aquirersMultiple = aqm[symbol]
@@ -101,6 +102,14 @@ def update_stock(symbol,entry=None , aqm=None, rev=None):
 				stock.revenue_growth = fetch.get_revenue_growth([symbol])[symbol]
 		except (KeyError,TypeError) as e:
 			stock.revenue_growth = 0
+
+		stock.save()
+		try:
+			stock.composite_Metric = round((stock.aquirersMultiple/stock.revenue_growth)*100,0)
+		except ZeroDivisionError:
+			stock.compositeMetric = 0
+
+
 
 		stock.one_yr_change = round(fetch.get_one_yr_change(symbol)*100 ,2)
 
