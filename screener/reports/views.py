@@ -96,7 +96,6 @@ def clean(request):
 	Stock.objects.filter(revenue_growth__lte=10).delete()  # Low growth
 	Stock.objects.filter(one_yr_change__lte=5).delete()  # Non trending
 	Stock.objects.filter(aquirersMultiple__iexact=0).delete()  # No aquirers multiple data
-	return render(request, "updating.html", context = {})
 
 	return redirect('index')
 
