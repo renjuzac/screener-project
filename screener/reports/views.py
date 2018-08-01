@@ -83,7 +83,7 @@ def auto_report(request, type):
 		stocks = Stock.objects.filter(aquirersMultiple__lte=20).filter(revenue_growth__gte=15).filter(one_yr_change__gte=25).filter(aquirersMultiple__gte=0)
 		response['name'] = "Value Stocks - Auto Generated"
 	else:
-		stocks = Stock.objects.filter(revenue_growth__gte=25).filter(one_yr_change__gte=25)
+		stocks = Stock.objects.filter(revenue_growth__gte=25).filter(one_yr_change__gte=20)
 		response['name'] = "Growth Stocks - Auto Generated"
 
 	table = ReportDetailTable(stocks.values())
@@ -96,6 +96,8 @@ def clean(request):
 	Stock.objects.filter(revenue_growth__lte=10).delete()  # Low growth
 	Stock.objects.filter(one_yr_change__lte=5).delete()  # Non trending
 	Stock.objects.filter(aquirersMultiple__iexact=0).delete()  # No aquirers multiple data
+	return render(request, "updating.html", context = {})
+
 	return redirect('index')
 
 def updating(request):
