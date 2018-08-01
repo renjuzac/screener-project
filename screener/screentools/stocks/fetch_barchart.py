@@ -3,6 +3,7 @@
 import json
 
 from screentools.stocks.caching import session
+import requests
 # from screentools.config import BARCHART_API_KEY
 
 BARCHART_API_KEY = "62ee527bc88e5383f47f67b551d75bda"
@@ -22,10 +23,13 @@ def getquote(symbols=symbols,fields=fields):
 
     for field in fields:
         fieldnames = fieldnames + "%2C" + field
+    print(symbols)
+    print(len(symbols))
 
     chunksize = 20      # Does not appear to have pagination support. 
     for i in range(0, len(symbols), chunksize):
         symbolchunk = symbols[i:i+chunksize]
+        print(symbolchunk)
 
         getquote_url = "https://marketdata.websol.barchart.com/getQuote.json?apikey={apikey}&symbols={symbolnames}&fields={fieldnames}"
 
@@ -34,12 +38,11 @@ def getquote(symbols=symbols,fields=fields):
             symbolnames = symbolnames + "%2C" + ticker
 
         getquote_url = getquote_url.format(apikey=BARCHART_API_KEY, symbolnames=symbolnames, fieldnames=fieldnames)
-        data = session.get(getquote_url)
-        jsondata = json.loads(data.text)
         print(getquote_url)
-        print("data from server",data.text)
-        print("as json",jsondata)
-        print("parsed",jsondata['results'])
+        data = session.get(getquote_url)
+#        data = requests.get(getquote_url)
+        jsondata = json.loads(data.text)
+#        if jsondata['results']:
         quotes.extend(jsondata['results'])
 
     return(quotes)

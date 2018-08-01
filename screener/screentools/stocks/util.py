@@ -106,7 +106,7 @@ def update_stock(symbol,entry=None , aqm=None, rev=None):
 		stock.save()
 		try:
 			stock.composite_Metric = round((stock.aquirersMultiple/stock.revenue_growth)*100,0)
-		except ZeroDivisionError:
+		except (ZeroDivisionError,TypeError):
 			stock.compositeMetric = 0
 
 

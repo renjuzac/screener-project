@@ -100,7 +100,7 @@ def clean(request):
 	return redirect('index')
 
 def updating(request):
-	#util.update_allreports()
+	util.update_allreports()
 	return render(request, "updating.html", context = {})
 
 
