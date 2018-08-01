@@ -6,7 +6,7 @@ import requests_cache
 import redis
 
 
-expire_after = timedelta(hours=24)
+expire_after = timedelta(hours=1)
 session = requests_cache.CachedSession(cache_name='.api_cache', backend='sqlite', expire_after=expire_after)
 
 

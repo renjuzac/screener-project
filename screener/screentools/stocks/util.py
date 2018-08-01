@@ -167,3 +167,8 @@ def update_report(report_id):
 # https://ubuntuforums.org/showthread.php?t=1110989
 # https://stackoverflow.com/questions/4075190/what-is-getattr-exactly-and-how-do-i-use-it
 
+def update_allreports():
+	for report in Report.objects.all():
+		update_report(report.id)
+
+

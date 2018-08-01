@@ -36,7 +36,10 @@ def getquote(symbols=symbols,fields=fields):
         getquote_url = getquote_url.format(apikey=BARCHART_API_KEY, symbolnames=symbolnames, fieldnames=fieldnames)
         data = session.get(getquote_url)
         jsondata = json.loads(data.text)
-
+        print(getquote_url)
+        print("data from server",data.text)
+        print("as json",jsondata)
+        print("parsed",jsondata['results'])
         quotes.extend(jsondata['results'])
 
     return(quotes)
